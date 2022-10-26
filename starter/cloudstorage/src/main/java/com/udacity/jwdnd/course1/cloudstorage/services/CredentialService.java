@@ -56,7 +56,7 @@ public class CredentialService {
         // Make sure that we delete a credential only if the user id matches!
         Credential credential = credentialMapper.getCredentialByCredentialId(credentialId);
 
-        if (credential != null && credential.getUserid() == userId) {
+        if (credential != null && credential.getUserId() == userId) {
             credentialMapper.delete(credentialId);
         }
     }

@@ -79,13 +79,13 @@
                         <tbody>
                         <tr th:each="file : ${fileList}">
                             <td>
-                                <a target="_blank" th:href="@{/file/view/{fileid}(fileid=${file.fileid})}"
+                                <a target="_blank" th:href="@{/file/view/{fileId}(fileId=${file.fileId})}"
                                    class="btn btn-success">View</a>
-                                <a target="_blank" th:href="@{/file/delete/{fileid}(fileid=${file.fileid})}"
+                                <a target="_blank" th:href="@{/file/delete/{fileId}(fileId=${file.fileId})}"
                                    class="btn btn-danger">Delete</a>
                             </td>
                             <th scope="row" th:text="${file.filename}">ExampleFile.txt</th>
-                            <th scope="row" th:text="${file.filesize}">12345</th>
+                            <th scope="row" th:text="${file.fileSize}">12345</th>
                         </tr>
                         </tbody>
                     </table>
@@ -110,16 +110,16 @@
                         <tbody>
                         <tr th:each="note : ${noteList}">
                             <td>
-                                <button th:data1="${note.noteid}" th:data2="${note.notetitle}"
-                                        th:data3="${note.notedescription}"
+                                <button th:data1="${note.noteId}" th:data2="${note.noteTitle}"
+                                        th:data3="${note.noteDescription}"
                                         th:onclick="javascript:showNoteModal(this.getAttribute('data1'), this.getAttribute('data2'), this.getAttribute('data3'))"
                                         id="edit-note-button" type="button" class="btn btn-success">Edit
                                 </button>
-                                <a id="delete-note-link" th:href="@{/note/delete/{noteid}(noteid=${note.noteid})}"
+                                <a id="delete-note-link" th:href="@{/note/delete/{noteId}(noteId=${note.noteId})}"
                                    class="btn btn-danger">Delete</a>
                             </td>
-                            <th class="note-title" scope="row" th:text="${note.notetitle}">Example Note Title</th>
-                            <td class="note-description" th:text="${note.notedescription}">Example Note Description</td>
+                            <th class="note-title" scope="row" th:text="${note.noteTitle}">Example Note Title</th>
+                            <td class="note-description" th:text="${note.noteDescription}">Example Note Description</td>
                         </tr>
                         </tbody>
                     </table>
@@ -181,14 +181,14 @@
                         <tbody>
                         <tr th:each="credential : ${credentialList}">
                             <td>
-                                <button id="edit-credential-button" th:data1="${credential.c.credentialid}"
+                                <button id="edit-credential-button" th:data1="${credential.c.credentialId}"
                                         th:data2="${credential.c.url}" th:data3="${credential.c.username}"
                                         th:data4="${credential.decryptedPassword}"
                                         th:onclick="javascript:showCredentialModal(this.getAttribute('data1'), this.getAttribute('data2'), this.getAttribute('data3'), this.getAttribute('data4'))"
                                         type="button" class="btn btn-success">Edit
                                 </button>
                                 <a id="delete-credential-link"
-                                   th:href="@{/credential/delete/{credentialid}(credentialid=${credential.c.credentialid})}"
+                                   th:href="@{/credential/delete/{credentialId}(credentialId=${credential.c.credentialId})}"
                                    class="btn btn-danger">Delete</a>
                             </td>
                             <th class="credential-url" scope="row" th:text="${credential.c.url}">Example Credential
