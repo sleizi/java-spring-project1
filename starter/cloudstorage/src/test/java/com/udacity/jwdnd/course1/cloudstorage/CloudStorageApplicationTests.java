@@ -3,16 +3,14 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import java.io.File;
+import java.util.List;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -20,6 +18,17 @@ class CloudStorageApplicationTests {
 	private int port;
 
 	private WebDriver driver;
+	private String baseUrl;
+
+	private static final String USERNAME = "seleniumtest";
+	private static final String PASSWORD = "$eleniumpa$$word";
+	private static final String FIRSTNAME = "Selenium";
+	private static final String LASTNAME = "Test";
+	private static final String NOTE_TITLE = "TestNote";
+	private static final String NOTE_DESCRIPTION = "Test Note Description";
+	private static final String CREDENTIAL_URL = "http://testurl";
+	private static final String CREDENTIAL_USERNAME = "TestUser";
+	private static final String CREDENTIAL_PASSWORD = "TestPassword";
 
 	@BeforeAll
 	static void beforeAll() {
@@ -28,6 +37,7 @@ class CloudStorageApplicationTests {
 
 	@BeforeEach
 	public void beforeEach() {
+		baseUrl = "http://localhost:" + port;
 		this.driver = new ChromeDriver();
 	}
 
@@ -40,166 +50,200 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void getLoginPage() {
-		driver.get("http://localhost:" + this.port + "/login");
+		driver.get(baseUrl + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
-	/**
-	 * PLEASE DO NOT DELETE THIS method.
-	 * Helper method for Udacity-supplied sanity checks.
-	 **/
-	private void doMockSignUp(String firstName, String lastName, String userName, String password){
-		// Create a dummy account for logging in later.
-
-		// Visit the sign-up page.
-		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
-		driver.get("http://localhost:" + this.port + "/signup");
-		webDriverWait.until(ExpectedConditions.titleContains("Sign Up"));
-		
-		// Fill out credentials
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputFirstName")));
-		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
-		inputFirstName.click();
-		inputFirstName.sendKeys(firstName);
-
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputLastName")));
-		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
-		inputLastName.click();
-		inputLastName.sendKeys(lastName);
-
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputUsername")));
-		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
-		inputUsername.click();
-		inputUsername.sendKeys(userName);
-
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputPassword")));
-		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
-		inputPassword.click();
-		inputPassword.sendKeys(password);
-
-		// Attempt to sign up.
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("buttonSignUp")));
-		WebElement buttonSignUp = driver.findElement(By.id("buttonSignUp"));
-		buttonSignUp.click();
-
-		/* Check that the sign up was successful. 
-		// You may have to modify the element "success-msg" and the sign-up 
-		// success message below depening on the rest of your code.
-		*/
-		Assertions.assertTrue(driver.findElement(By.id("success-msg")).getText().contains("You successfully signed up!"));
-	}
-
-	
-	
-	/**
-	 * PLEASE DO NOT DELETE THIS method.
-	 * Helper method for Udacity-supplied sanity checks.
-	 **/
-	private void doLogIn(String userName, String password)
-	{
-		// Log in to our dummy account.
-		driver.get("http://localhost:" + this.port + "/login");
-		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
-
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputUsername")));
-		WebElement loginUserName = driver.findElement(By.id("inputUsername"));
-		loginUserName.click();
-		loginUserName.sendKeys(userName);
-
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputPassword")));
-		WebElement loginPassword = driver.findElement(By.id("inputPassword"));
-		loginPassword.click();
-		loginPassword.sendKeys(password);
-
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
-		WebElement loginButton = driver.findElement(By.id("login-button"));
-		loginButton.click();
-
-		webDriverWait.until(ExpectedConditions.titleContains("Home"));
-
-	}
-
-	/**
-	 * PLEASE DO NOT DELETE THIS TEST. You may modify this test to work with the 
-	 * rest of your code. 
-	 * This test is provided by Udacity to perform some basic sanity testing of 
-	 * your code to ensure that it meets certain rubric criteria. 
-	 * 
-	 * If this test is failing, please ensure that you are handling redirecting users 
-	 * back to the login page after a succesful sign up.
-	 * Read more about the requirement in the rubric: 
-	 * https://review.udacity.com/#!/rubrics/2724/view 
-	 */
 	@Test
-	public void testRedirection() {
-		// Create a test account
-		doMockSignUp("Redirection","Test","RT","123");
-		
-		// Check if we have been redirected to the log in page.
-		Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
+	public void getSignupPage() {
+		driver.get(baseUrl + "/signup");
+		Assertions.assertEquals("Sign Up", driver.getTitle());
 	}
 
-	/**
-	 * PLEASE DO NOT DELETE THIS TEST. You may modify this test to work with the 
-	 * rest of your code. 
-	 * This test is provided by Udacity to perform some basic sanity testing of 
-	 * your code to ensure that it meets certain rubric criteria. 
-	 * 
-	 * If this test is failing, please ensure that you are handling bad URLs 
-	 * gracefully, for example with a custom error page.
-	 * 
-	 * Read more about custom error pages at: 
-	 * https://attacomsian.com/blog/spring-boot-custom-error-page#displaying-custom-error-page
-	 */
 	@Test
-	public void testBadUrl() {
-		// Create a test account
-		doMockSignUp("URL","Test","UT","123");
-		doLogIn("UT", "123");
-		
-		// Try to access a random made-up URL.
-		driver.get("http://localhost:" + this.port + "/some-random-page");
-		Assertions.assertFalse(driver.getPageSource().contains("Whitelabel Error Page"));
+	public void signupAndLoginUserSuccess() {
+		signup(driver);
+		login(driver);
+		Assertions.assertEquals("Home", driver.getTitle());
 	}
 
-
-	/**
-	 * PLEASE DO NOT DELETE THIS TEST. You may modify this test to work with the 
-	 * rest of your code. 
-	 * This test is provided by Udacity to perform some basic sanity testing of 
-	 * your code to ensure that it meets certain rubric criteria. 
-	 * 
-	 * If this test is failing, please ensure that you are handling uploading large files (>1MB),
-	 * gracefully in your code. 
-	 * 
-	 * Read more about file size limits here: 
-	 * https://spring.io/guides/gs/uploading-files/ under the "Tuning File Upload Limits" section.
-	 */
 	@Test
-	public void testLargeUpload() {
-		// Create a test account
-		doMockSignUp("Large File","Test","LFT","123");
-		doLogIn("LFT", "123");
+	public void loginFailsIfNotSignedup() {
+		final String username = "hacker";
+		final String password = "badpassword";
 
-		// Try to upload an arbitrary large file
-		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
-		String fileName = "upload5m.zip";
+		driver.get(baseUrl + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(username, password);
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("fileUpload")));
-		WebElement fileSelectButton = driver.findElement(By.id("fileUpload"));
-		fileSelectButton.sendKeys(new File(fileName).getAbsolutePath());
+		WebElement errorMessage = driver.findElement(By.id("containerLoginError"));
 
-		WebElement uploadButton = driver.findElement(By.id("uploadButton"));
-		uploadButton.click();
-		try {
-			webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("success")));
-		} catch (org.openqa.selenium.TimeoutException e) {
-			System.out.println("Large File upload failed");
-		}
-		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
-
+		Assertions.assertEquals("Login", driver.getTitle());
+		Assertions.assertEquals("Invalid username or password", errorMessage.getText());
 	}
 
+	@Test
+	public void redirectToLoginIfNotSignedIn() {
+		driver.get(baseUrl + "/home");
 
+		Assertions.assertEquals("Login", driver.getTitle());
+	}
 
+	@Test
+	public void createAndReadNewNote() {
+		signup(driver);
+		login(driver);
+		driver.get(baseUrl + "/home");
+		HomePage homePage = new HomePage(driver);
+
+		// Create
+		homePage.createNewNote(NOTE_TITLE, NOTE_DESCRIPTION);
+
+		// Read
+		List<String> noteTitles = homePage.getNoteTitles();
+		List<String> noteDescriptions = homePage.getNoteDescriptions();
+		Assertions.assertEquals(NOTE_TITLE, noteTitles.get(0));
+		Assertions.assertEquals(NOTE_DESCRIPTION, noteDescriptions.get(0));
+
+		// Cleanup
+		homePage.deleteNote(0);
+	}
+
+	@Test
+	public void createAndEditAndReadNewNote() {
+		signup(driver);
+		login(driver);
+		driver.get(baseUrl + "/home");
+		HomePage homePage = new HomePage(driver);
+
+		// Create
+		homePage.createNewNote(NOTE_TITLE, NOTE_DESCRIPTION);
+
+		// Edit
+		homePage.editNote(0, NOTE_TITLE + "EDIT", NOTE_DESCRIPTION + "EDIT");
+
+		// Read
+		List<String> noteTitles = homePage.getNoteTitles();
+		List<String> noteDescriptions = homePage.getNoteDescriptions();
+		Assertions.assertEquals(NOTE_TITLE + "EDIT", noteTitles.get(0));
+		Assertions.assertEquals(NOTE_DESCRIPTION + "EDIT", noteDescriptions.get(0));
+
+		// Cleanup
+		homePage.deleteNote(0);
+	}
+
+	@Test
+	public void createAndDeleteNewNote() {
+		signup(driver);
+		login(driver);
+		driver.get(baseUrl + "/home");
+		HomePage homePage = new HomePage(driver);
+
+		// Create
+		homePage.createNewNote(NOTE_TITLE, NOTE_DESCRIPTION);
+		homePage.createNewNote(NOTE_TITLE + "2", NOTE_DESCRIPTION + "2");
+		List<String> noteTitles = homePage.getNoteTitles();
+		List<String> noteDescriptions = homePage.getNoteDescriptions();
+		Assertions.assertEquals(2, noteTitles.size());
+		Assertions.assertEquals(2, noteDescriptions.size());
+
+		// Delete
+		homePage.deleteNote(1);
+		noteTitles = homePage.getNoteTitles();
+		noteDescriptions = homePage.getNoteDescriptions();
+		Assertions.assertEquals(1, noteTitles.size());
+		Assertions.assertEquals(1, noteDescriptions.size());
+		Assertions.assertEquals(NOTE_TITLE, noteTitles.get(0));
+		Assertions.assertEquals(NOTE_DESCRIPTION, noteDescriptions.get(0));
+
+		// Cleanup
+		homePage.deleteNote(0);
+	}
+
+	@Test
+	public void createAndReadNewCredential() {
+		signup(driver);
+		login(driver);
+		HomePage homePage = new HomePage(driver);
+
+		// Create
+		homePage.createNewCredential(CREDENTIAL_URL, CREDENTIAL_USERNAME, CREDENTIAL_PASSWORD);
+
+		// Read
+		List<String> credentialUrls = homePage.getCredentialUrls();
+		List<String> credentialUsernames = homePage.getCredentialUsernames();
+		List<String> credentialPasswords = homePage.getCredentialPasswords();
+		Assertions.assertEquals(CREDENTIAL_URL, credentialUrls.get(0));
+		Assertions.assertEquals(CREDENTIAL_USERNAME, credentialUsernames.get(0));
+		Assertions.assertNotEquals(CREDENTIAL_PASSWORD, credentialPasswords.get(0)); // must not show unencrypted password
+
+		// Cleanup
+		homePage.deleteCredential(0);
+	}
+
+	@Test
+	public void createAndEditAndReadNewCredential() {
+		signup(driver);
+		login(driver);
+		HomePage homePage = new HomePage(driver);
+
+		// Create
+		homePage.createNewCredential(CREDENTIAL_URL, CREDENTIAL_USERNAME, CREDENTIAL_PASSWORD);
+
+		// Edit
+		homePage.editCredential(0, CREDENTIAL_URL + "EDIT", CREDENTIAL_USERNAME + "EDIT", CREDENTIAL_PASSWORD + "EDIT");
+
+		// Read
+		List<String> credentialUrls = homePage.getCredentialUrls();
+		List<String> credentialUsernames = homePage.getCredentialUsernames();
+		List<String> credentialPasswords = homePage.getCredentialPasswords();
+		Assertions.assertEquals(CREDENTIAL_URL + "EDIT", credentialUrls.get(0));
+		Assertions.assertEquals(CREDENTIAL_USERNAME + "EDIT", credentialUsernames.get(0));
+		Assertions.assertNotEquals(CREDENTIAL_PASSWORD + "EDIT", credentialPasswords.get(0)); // must not show unencrypted password
+
+		// Cleanup
+		homePage.deleteCredential(0);
+	}
+
+	@Test
+	public void createAndDeleteNewCredential() {
+		signup(driver);
+		login(driver);
+		HomePage homePage = new HomePage(driver);
+		driver.get(baseUrl + "/home");
+
+		// Create
+		homePage.createNewCredential(CREDENTIAL_URL, CREDENTIAL_USERNAME, CREDENTIAL_PASSWORD);
+		homePage.createNewCredential(CREDENTIAL_URL+"2", CREDENTIAL_USERNAME+"2", CREDENTIAL_PASSWORD+"2");
+		List<String> credentialUrls = homePage.getCredentialUrls();
+		List<String> credentialUsernames = homePage.getCredentialUsernames();
+		List<String> credentialPasswords = homePage.getCredentialPasswords();
+		Assertions.assertEquals(2, credentialUrls.size());
+		Assertions.assertEquals(2, credentialUsernames.size());
+		Assertions.assertEquals(2, credentialPasswords.size());
+
+		// Delete
+		homePage.deleteCredential(1);
+		credentialUrls = homePage.getCredentialUrls();
+		credentialUsernames = homePage.getCredentialUsernames();
+		credentialPasswords = homePage.getCredentialPasswords();
+		Assertions.assertEquals(1, credentialUrls.size());
+		Assertions.assertEquals(1, credentialUsernames.size());
+		Assertions.assertEquals(1, credentialPasswords.size());
+
+		// Cleanup
+		homePage.deleteCredential(0);
+	}
+
+	private void signup(WebDriver driver) {
+		driver.get(baseUrl + "/signup");
+		SignupPage signupPage = new SignupPage(driver);
+		signupPage.signup(FIRSTNAME, LASTNAME, USERNAME, PASSWORD);
+	}
+
+	private void login(WebDriver driver) {
+		driver.get(baseUrl + "/login");
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.login(USERNAME, PASSWORD);
+	}
 }
