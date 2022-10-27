@@ -5,10 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-public abstract class AbstractPage {
+public abstract class BasePage {
     private WebDriver driver;
 
-    public AbstractPage(WebDriver webDriver) {
+    public BasePage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
         this.driver = webDriver;
     }

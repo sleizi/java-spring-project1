@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePage extends AbstractPage {
+public class HomePage extends BasePage {
     private WebDriver webDriver;
 
     public HomePage(WebDriver webDriver) {

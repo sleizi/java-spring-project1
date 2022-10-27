@@ -21,7 +21,7 @@ public class FileService {
     }
 
     public File getFile(Integer fileId, Integer userId) {
-        // Make sure that we retrieve a file only if the user id matches!
+
         File file = fileMapper.getFileByFileId(fileId);
 
         if (file != null && file.getUserId() == userId) {
@@ -37,7 +37,7 @@ public class FileService {
 
         File existingFile = fileMapper.getFileByFilenameForUser(multipartFile.getOriginalFilename(), userId);
         if (existingFile != null) {
-            // file with that name already exists - no insert!
+
             return false;
         }
 
@@ -46,7 +46,7 @@ public class FileService {
     }
 
     public void deleteFile(Integer fileId, Integer userId) {
-        // Make sure that we delete a file only if the user id matches!
+
         File file = fileMapper.getFileByFileId(fileId);
 
         if (file != null && file.getUserId() == userId) {

@@ -4,10 +4,8 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +24,6 @@ public class FileController {
     private FileService fileService;
     private UserService userService;
 
-    @Value("${config.max-file-size}")
-    private DataSize maximumFileSize;
-
     public FileController(FileService fileService, UserService userService) {
         this.fileService = fileService;
         this.userService = userService;
@@ -38,11 +33,6 @@ public class FileController {
     public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file,
                                    RedirectAttributes redirectAttributes,
                                    Authentication authentication) throws IOException {
-
-        if (file.getSize() > maximumFileSize.toBytes()) {
-            redirectAttributes.addFlashAttribute("fileTooLargeError", true);
-            return "redirect:/home";
-        }
 
         User currentUser = userService.getUser(authentication.getName());
         boolean uploadResult = fileService.uploadMultipartFile(file, currentUser.getUserId());

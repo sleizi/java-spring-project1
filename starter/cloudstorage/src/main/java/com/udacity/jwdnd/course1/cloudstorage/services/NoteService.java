@@ -29,7 +29,7 @@ public class NoteService {
     }
 
     public void deleteNote(Integer noteId, Integer userId) {
-        // Make sure that we delete a note only if the user id matches!
+
         Note note = noteMapper.getNoteByNoteId(noteId);
 
         if (note != null && note.getUserId() == userId) {
