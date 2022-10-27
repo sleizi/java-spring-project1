@@ -26,7 +26,7 @@ public class FileController {
     private FileService fileService;
     private UserService userService;
 
-    @Value("${files.max-file-size}")
+    @Value("${config.max-file-size}")
     private DataSize maximumFileSize;
 
     public FileController(FileService fileService, UserService userService) {
